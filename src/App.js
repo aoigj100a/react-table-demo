@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useMemo } from "react";
 
 // 引入 chakra UI 的 Provider
 import { ChakraProvider } from "@chakra-ui/react";
@@ -15,12 +16,17 @@ import {
   TableContainer,
 } from "@chakra-ui/table";
 
+// 引入 icon
+
+import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+
 // 引入 react-table v8 創建表格工具
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
+  getSortedRowModel,
 } from "@tanstack/react-table";
 
 // 表格的資料
@@ -53,7 +59,7 @@ const defaultData = [
 
 const columnHelper = createColumnHelper();
 
-const columns = [
+const _columns = [
   columnHelper.accessor("firstName", {
     cell: (info) => info.getValue(),
     footer: (info) => info.column.id,
@@ -85,11 +91,19 @@ const columns = [
 
 function App() {
   const [data, setData] = React.useState(() => [...defaultData]);
+  const [sorting, setSorting] = React.useState([]);
+
+  const columns = React.useMemo(() => _columns, []);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
   });
   return (
     <ChakraProvider>
@@ -100,12 +114,29 @@ function App() {
               <Tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <Th key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
+                    {header.isPlaceholder ? null : (
+                      <div
+                        {...{
+                          className: header.column.getCanSort()
+                            ? "cursor-pointer select-none"
+                            : "",
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(
                           header.column.columnDef.header,
                           header.getContext()
                         )}
+                        {{
+                          asc: (
+                            <TriangleDownIcon aria-label="sorted descending" />
+                          ),
+                          desc: (
+                            <TriangleUpIcon aria-label="sorted ascending" />
+                          ),
+                        }[header.column.getIsSorted()] ?? null}
+                      </div>
+                    )}
                   </Th>
                 ))}
               </Tr>
@@ -140,6 +171,7 @@ function App() {
           </Tfoot>
         </Table>
       </TableContainer>
+      <pre>{JSON.stringify(sorting, null, 2)}</pre>
     </ChakraProvider>
   );
 }
