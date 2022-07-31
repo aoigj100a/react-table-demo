@@ -1,7 +1,7 @@
 # react-table-demo
 
 使用 React 18 CRA 腳手架製作的專案。
-這是一個使用原生 javascript 製作的表格篩選 demo，採用 react-table v8 與樣式庫 chakra-ui。
+這是一個使用原生 javascript 製作的表格排序 demo，採用 react-table v8 與樣式庫 chakra-ui。
 
 ## 環境建置與需求
 
@@ -13,7 +13,7 @@
 1. 將專案複製到本機 (兩種方法)
 
 > (1) 打開終端機輸入
-`git clone `</br>
+`git clone https://github.com/aoigj100a/react-table-demo.git`</br>
 > (2) 點選 download ZIP 下載
 
 2. 進入專案資料夾安裝工具包
