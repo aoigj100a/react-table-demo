@@ -17,7 +17,6 @@ import {
 } from "@chakra-ui/table";
 
 // 引入 icon
-
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 
 // 引入 react-table v8 創建表格工具
@@ -57,6 +56,7 @@ const defaultData = [
   },
 ];
 
+// 先定義一下 columns 晚點要利用 columns 與 defaultData 來製作表格
 const columnHelper = createColumnHelper();
 
 const _columns = [
@@ -90,6 +90,7 @@ const _columns = [
 ];
 
 function App() {
+
   const [data, setData] = React.useState(() => [...defaultData]);
   const [sorting, setSorting] = React.useState([]);
 
@@ -105,6 +106,7 @@ function App() {
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
   });
+
   return (
     <ChakraProvider>
       <TableContainer>
